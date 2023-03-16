@@ -2,7 +2,7 @@ package data
 
 type User struct {
 	userID    int
-	Name      string
+	Fullname  string
 	Username  string
 	Password  string
 	Create_at int

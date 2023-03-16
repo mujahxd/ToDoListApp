@@ -4,14 +4,22 @@ import (
 	"database/sql"
 )
 
-type model struct {
+type Model struct {
 	conn *sql.DB
 }
 
-func (pm *model) SetSQLConnection(db *sql.DB) {
+func (pm *Model) SetSQLConnection(db *sql.DB) {
 	pm.conn = db
 }
 
-func (pm model) Login([]User, error) {
-	rows, err := pm.conn.Query("SELECT barcode, nama, qty, harga, input_oleh FROM produk")
+func (pm *Model) Login(username string, password string) (*User, error) {
+	var user = User{}
+
+	err := pm.conn.QueryRow("SELECT fullname, username FROM user where username = ? AND password = ?", username, password).Scan(&user.Fullname, &user.Username)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
